@@ -1,12 +1,37 @@
 version: '3.8'
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-studio-app
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ai_studio
+      REDIS_URL: redis://redis:6379
+      LOG_LEVEL: debug
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - ai-studio-network
+    restart: unless-stopped
+
   postgres:
     image: postgres:16-alpine
+    container_name: ai-studio-postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: ai_engineering_studio
+      POSTGRES_DB: ai_studio
     ports:
       - "5432:5432"
     volumes:
@@ -17,39 +42,60 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - ai-studio
+      - ai-studio-network
+    restart: unless-stopped
 
   redis:
     image: redis:7-alpine
+    container_name: ai-studio-redis
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    command: redis-server --appendonly yes
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - ai-studio
+      - ai-studio-network
+    restart: unless-stopped
 
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: ai-studio-pgadmin
     environment:
-      - OLLAMA_HOST=0.0.0.0:11434
-    volumes:
-      - ollama_data:/root/.ollama
-    pull_policy: always
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
     networks:
-      - ai-studio
+      - ai-studio-network
+    restart: unless-stopped
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: ai-studio-redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - ai-studio-network
+    restart: unless-stopped
 
 volumes:
   postgres_data:
+    driver: local
   redis_data:
-  ollama_data:
+    driver: local
 
 networks:
-  ai-studio:
+  ai-studio-network:
     driver: bridge
