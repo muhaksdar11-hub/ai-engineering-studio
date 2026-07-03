@@ -1,0 +1,89 @@
+# Application Environment
+NODE_ENV=development
+PORT=3000
+LOG_LEVEL=debug
+
+# Database Configuration
+DATABASE_URL=postgresql://user:password@localhost:5432/ai_studio
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=ai_studio
+DB_USER=postgres
+DB_PASSWORD=postgres
+
+# Redis Configuration
+REDIS_URL=redis://localhost:6379
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# JWT & Security
+JWT_SECRET=your-secret-key-change-in-production
+JWT_EXPIRES_IN=7d
+BCRYPT_ROUNDS=10
+
+# External APIs
+OPENAI_API_KEY=sk-your-key-here
+OPENAI_MODEL=gpt-4
+OPENAI_TIMEOUT=30000
+
+HUGGINGFACE_API_KEY=hf_your-key-here
+HUGGINGFACE_MODEL=meta-llama/Llama-2-7b
+
+ANTHROPIC_API_KEY=sk-ant-your-key-here
+
+# Application URLs
+API_URL=http://localhost:3000
+FRONTEND_URL=http://localhost:3000
+WEBHOOK_URL=http://localhost:3000/webhooks
+
+# Email Configuration (Optional)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
+SMTP_FROM=noreply@example.com
+
+# AWS Configuration (Optional)
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-key
+AWS_S3_BUCKET=ai-studio-uploads
+
+# GitHub Integration (Optional)
+GITHUB_TOKEN=ghp_your-token
+GITHUB_WEBHOOK_SECRET=your-webhook-secret
+
+# Monitoring & Analytics
+SENTRY_DSN=https://your-sentry-dsn
+DATADOG_API_KEY=your-datadog-key
+ENABLE_METRICS=true
+
+# Rate Limiting
+RATE_LIMIT_WINDOW=15m
+RATE_LIMIT_MAX_REQUESTS=100
+
+# Cache Configuration
+CACHE_TTL=3600
+CACHE_MAX_SIZE=1000
+
+# File Upload
+MAX_FILE_SIZE=52428800
+ALLOWED_UPLOAD_TYPES=pdf,txt,json,csv,xml
+
+# AI Model Configuration
+MODEL_TEMPERATURE=0.7
+MODEL_MAX_TOKENS=4096
+MODEL_TOP_P=0.9
+
+# Docker & Deployment
+DOCKER_REGISTRY=ghcr.io
+DOCKER_IMAGE_NAME=muhaksdar11-hub/ai-engineering-studio
+
+# Railway Deployment
+RAILWAY_ENVIRONMENT=development
+RAILWAY_PROJECT_ID=your-project-id
+
+# Development Tools
+DEBUG=app:*
+ENABLE_SWAGGER=true
+CORS_ORIGIN=http://localhost:3000
